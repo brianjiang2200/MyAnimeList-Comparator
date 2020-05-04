@@ -19,29 +19,58 @@ const App = () => {
 
   const endpoint = "https://api.jikan.moe/v3";
 
-  //FETCH USER DATA
+  //ADD USER 
+  const addUser = async () => {
+    if (!(await getUser())) {
+      getList();
+    }
+    else {
+      //INVALID USERNAME, REMOVE FROM LIST
+      users.pop();
+    }
+  }
+
+  //FETCH USER PROFILE DATA
   const getUser = async () => {
     if (users.length) {
-      let query = users[users.length - 1];
-      const response = await fetch (
-        `${endpoint}/user/${query}/profile`
-      );
-      const data = await response.json();
-      setUserdata([...userdata, data]);
-      console.log(data);
+      const query = users[users.length - 1];
+      try {
+        const response = await fetch (
+          `${endpoint}/user/${query}/profile`
+        );
+        const data = await response.json();
+        //VERIFY USERNAME
+        if (data.type === "BadResponseException") {
+          console.log("Invalid Username");
+          return -1;
+        }
+        setUserdata([...userdata, data]);
+        console.log(data);
+      } 
+      catch (err) {
+        console.log("API Request Failed: " + err);
+        return -1;
+      }
+      return 0;
     }
+    return 0;
   }
 
   //FETCH USER ANIME LIST
   const getList = async () => {
     if (users.length) {
-      let query = users[users.length - 1];
-      const response = await fetch (
-        `${endpoint}/user/${query}/animelist/all`
-      );
-      const data = await response.json();
-      setAnimeLists([...animeLists, data]);
-      console.log(data);
+      const query = users[users.length - 1];
+      try {
+        const response = await fetch (
+          `${endpoint}/user/${query}/animelist/all?sort=descending&order_by=title`
+        );
+        const data = await response.json();
+        setAnimeLists([...animeLists, data]);
+        console.log(data);
+      } 
+      catch (err) {
+        console.log(err);
+      }
     }
   }
 
@@ -58,8 +87,7 @@ const App = () => {
   }
 
   useEffect(() => {
-    getUser();
-    getList();
+    addUser();
   }, [users]);
 
   const updateSearch = e => {
@@ -102,6 +130,7 @@ const App = () => {
           ))};
         </div>
         <div className="anime-list">
+          <h1>Shared Anime</h1>
           <AnimeList 
             list={(animeLists.length) ? animeLists[0].anime : []}
             index={index}

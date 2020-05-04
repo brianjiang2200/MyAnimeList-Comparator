@@ -17,6 +17,7 @@ const AnimeList = (props) => {
             <div className="anime-list">
                 {list.map(anime => (
                     <Anime 
+                        key={anime.mal_id}
                         name={anime.title}
                         image={anime.image_url} 
                     />
