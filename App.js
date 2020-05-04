@@ -4,8 +4,6 @@ import Anime from './Anime';
 import AnimeList from './Anime-list';
 import './App.css';
 
-//<AnimeList list={(animeLists.length > 0) ? animeLists[0] : []}/>
-
 const App = () => {
 
   //Array of Users
@@ -16,6 +14,8 @@ const App = () => {
   const [userdata, setUserdata] = useState([]);
   //Array of AnimeLists
   const [animeLists, setAnimeLists] = useState([]);
+  //Anime List index
+  const [index, setIndex] = useState(0);
 
   const endpoint = "https://api.jikan.moe/v3";
 
@@ -43,6 +43,18 @@ const App = () => {
       setAnimeLists([...animeLists, data]);
       console.log(data);
     }
+  }
+
+  //Get next 4 anime
+  const scrollForward = () => {
+    if (animeLists.length && index < animeLists[0].anime.length) {
+      setIndex(index + 4);
+    }
+  }
+
+  //Get previous 4 anime 
+  const scrollBack = () => {
+    if (index > 0) {setIndex(index - 4);}
   }
 
   useEffect(() => {
@@ -91,9 +103,11 @@ const App = () => {
         </div>
         <div className="anime-list">
           <AnimeList 
-            list={(animeLists.length > 0) ? animeLists[0].anime : []}
-            index={0}
+            list={(animeLists.length) ? animeLists[0].anime : []}
+            index={index}
           />
+          <button className="next-btn" onClick={scrollForward}>Next 4 Anime</button>
+          <button className="prev-btn" onClick={scrollBack}>Previous 4 Anime</button>
         </div>
       </main>
     </div>

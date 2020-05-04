@@ -4,6 +4,7 @@ const Anime = (props) => {
     return (
         <div className="anime">
             <h2>{props.name}</h2>
+            <img src={props.image} alt="Missing Picture"></img>
         </div>
     );
 };
