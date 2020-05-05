@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import logo from './assets/Anime_eye.svg';
 import AnimeList from './Anime-list';
+import getCommon from './Common';
 import './App.css';
 
 const App = () => {
@@ -19,6 +20,14 @@ const App = () => {
   const [index, setIndex] = useState(0);
 
   const endpoint = "https://api.jikan.moe/v3";
+
+  useEffect(() => {
+    addUser();
+  }, [users]);
+
+  useEffect(() => {
+    getCommon(animeLists, setGallery);
+  }, [animeLists]);
 
   //ADD USER 
   const addUser = async () => {
@@ -66,7 +75,6 @@ const App = () => {
           `${endpoint}/user/${query}/animelist/all?sort=descending&order_by=title`
         );
         const data = await response.json();
-        //NEED TO PERFORM DEEP COPY
         setAnimeLists([...animeLists, data.anime]);
         console.log(data.anime);
       } 
@@ -76,64 +84,9 @@ const App = () => {
     }
   }
 
-  //DEBUG
-  const testStates = () => {
-    console.log(animeLists);
-    console.log(userdata);
-  }
-
-    //GET GALLERY ANIME
-    const getGallery = () => {
-      try {
-        //CREATE A COPY OF EACH ANIMELIST
-        let lists = [];
-        for (let i = 0; i < animeLists.length; ++i) {
-          lists.push(JSON.parse(JSON.stringify(animeLists[i])));
-        }
-        //GET COMMON ARRAY ELEMENTS 
-        let result = [];
-        if (lists.length) {
-          //FOR EACH ELEMENT IN THE FIRST LIST...
-          for (let j = 0; j < lists[0].length; ++j) {
-            const found = lists[0][j].title;
-
-            //FIND THE ELEMENT IF IT EXISTS IN ALL OTHER LISTS AND ADD TO GALLERY
-            for (let k = 1; k < lists.length; ++k) {
-              //No elements left 
-              if (!lists[k].length) 
-                break;
-              //IF FIRST TITLE OF A LIST LARGER THAN FOUND, TITLE NOT SHARED, MOVE TO NEXT TITLE
-              if (lists[k][0].title > found) {
-                break;
-              }
-
-              else {
-                //REMOVE "<" ANIME CURRENTLY AT THE START OF EACH LIST
-                while (lists[k][0].title < found) {
-                  lists[k].shift();
-                }
-                if (lists[k].length && lists[k][0].title !== found) {
-                  break;
-                }
-              }
-
-              //IF THE END OF LOOP REACHED, PUSH THE TITLE ONTO GALLERY
-              if (k === lists.length - 1) {
-                result.push(lists[0][j]);
-              }
-            } //END INNER FOR LOOP
-
-          } //END OUTER FOR LOOP
-        }
-        console.log(result);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-
   //Get next 4 anime
   const scrollForward = () => {
-    if (animeLists.length && index < animeLists[0].anime.length) {
+    if (gallery.length && index < gallery.length) {
       setIndex(index + 4);
     }
   }
@@ -142,10 +95,6 @@ const App = () => {
   const scrollBack = () => {
     if (index > 0) {setIndex(index - 4);}
   }
-
-  useEffect(() => {
-    addUser();
-  }, [users]);
 
   const updateSearch = e => {
     setSearch(e.target.value);
@@ -174,7 +123,7 @@ const App = () => {
           <button 
             className="search-button" 
             type="submit">
-              Get User's MyAnimelist
+              Add User
           </button>
         </form>
       </header>
@@ -189,15 +138,13 @@ const App = () => {
         <div className="anime-list">
           <h1>Shared Anime</h1>
           <AnimeList 
-            list={(animeLists.length) ? animeLists[0] : []}
+            list={gallery}
             index={index}
           />
         </div>
-        <div>
+        <div className="gallery-scroll">
           <button className="next-btn" onClick={scrollForward}>Next 4 Anime</button>
           <button className="prev-btn" onClick={scrollBack}>Previous 4 Anime</button>
-          <button onClick={getGallery}>Get Gallery</button>
-          <button onClick={testStates}>Test States</button>
         </div>
       </main>
     </div>
