@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import logo from './assets/Anime_eye.svg';
-import Anime from './Anime';
 import AnimeList from './Anime-list';
 import './App.css';
 
@@ -13,8 +12,10 @@ const App = () => {
   //Array of UserData
   const [userdata, setUserdata] = useState([]);
   //Array of AnimeLists
-  const [animeLists, setAnimeLists] = useState([]);
-  //Anime List index
+  let [animeLists, setAnimeLists] = useState([]);
+  //Displayed Anime
+  const [gallery, setGallery] = useState([]);
+  //Gallery index
   const [index, setIndex] = useState(0);
 
   const endpoint = "https://api.jikan.moe/v3";
@@ -65,14 +66,70 @@ const App = () => {
           `${endpoint}/user/${query}/animelist/all?sort=descending&order_by=title`
         );
         const data = await response.json();
-        setAnimeLists([...animeLists, data]);
-        console.log(data);
+        //NEED TO PERFORM DEEP COPY
+        setAnimeLists([...animeLists, data.anime]);
+        console.log(data.anime);
       } 
       catch (err) {
         console.log(err);
       }
     }
   }
+
+  //DEBUG
+  const testStates = () => {
+    console.log(animeLists);
+    console.log(userdata);
+  }
+
+    //GET GALLERY ANIME
+    const getGallery = () => {
+      try {
+        //CREATE A COPY OF EACH ANIMELIST
+        let lists = [];
+        for (let i = 0; i < animeLists.length; ++i) {
+          lists.push(JSON.parse(JSON.stringify(animeLists[i])));
+        }
+        //GET COMMON ARRAY ELEMENTS 
+        let result = [];
+        if (lists.length) {
+          //FOR EACH ELEMENT IN THE FIRST LIST...
+          for (let j = 0; j < lists[0].length; ++j) {
+            const found = lists[0][j].title;
+
+            //FIND THE ELEMENT IF IT EXISTS IN ALL OTHER LISTS AND ADD TO GALLERY
+            for (let k = 1; k < lists.length; ++k) {
+              //No elements left 
+              if (!lists[k].length) 
+                break;
+              //IF FIRST TITLE OF A LIST LARGER THAN FOUND, TITLE NOT SHARED, MOVE TO NEXT TITLE
+              if (lists[k][0].title > found) {
+                break;
+              }
+
+              else {
+                //REMOVE "<" ANIME CURRENTLY AT THE START OF EACH LIST
+                while (lists[k][0].title < found) {
+                  lists[k].shift();
+                }
+                if (lists[k].length && lists[k][0].title !== found) {
+                  break;
+                }
+              }
+
+              //IF THE END OF LOOP REACHED, PUSH THE TITLE ONTO GALLERY
+              if (k === lists.length - 1) {
+                result.push(lists[0][j]);
+              }
+            } //END INNER FOR LOOP
+
+          } //END OUTER FOR LOOP
+        }
+        console.log(result);
+      } catch (err) {
+        console.log(err);
+      }
+    }
 
   //Get next 4 anime
   const scrollForward = () => {
@@ -132,11 +189,15 @@ const App = () => {
         <div className="anime-list">
           <h1>Shared Anime</h1>
           <AnimeList 
-            list={(animeLists.length) ? animeLists[0].anime : []}
+            list={(animeLists.length) ? animeLists[0] : []}
             index={index}
           />
+        </div>
+        <div>
           <button className="next-btn" onClick={scrollForward}>Next 4 Anime</button>
           <button className="prev-btn" onClick={scrollBack}>Previous 4 Anime</button>
+          <button onClick={getGallery}>Get Gallery</button>
+          <button onClick={testStates}>Test States</button>
         </div>
       </main>
     </div>
