@@ -8,6 +8,6 @@ html {
   font-size: 62.5%;
 }
 
-.anime-list {
+.anime-list, .manga-list {
   display: flex;
 }

@@ -1,9 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 
 import logo from './assets/Anime_eye.svg';
 
 import AnimeGallery from './AnimeGallery';
+import MangaGallery from './MangaGallery';
 
 import './App.css';
 
@@ -76,6 +78,18 @@ const App = () => {
           <div className="logo-container">
             <img id="logo" src={logo} alt="Logo"></img>
             <h3 className="app-name">User Search</h3>
+            <Switch>
+              <Route path="/manga">
+                <Link to="/">
+                  <button>Compare Anime instead</button>
+                </Link>
+              </Route>
+              <Route path="/">
+                <Link to="/manga">
+                  <button>Compare Manga instead</button>
+                </Link>
+              </Route>
+            </Switch>
           </div>   
           <form onSubmit={getSearch} className="search-form">
             <input 
@@ -99,7 +113,14 @@ const App = () => {
               </li>
             ))};
           </div>
-          <AnimeGallery users={users} endpoint={endpoint}/>
+          <Switch>
+              <Route path="/manga">
+                <MangaGallery users={users} endpoint={endpoint}/>
+              </Route>
+              <Route path="/">
+                <AnimeGallery users={users} endpoint={endpoint}/>
+              </Route>
+          </Switch>
         </main>
       </div>
     </Router>

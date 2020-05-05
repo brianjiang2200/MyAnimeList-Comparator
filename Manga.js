@@ -1,8 +1,11 @@
 import React from 'react';
 
-const Manga = () => {
+const Manga = (props) => {
     return (
-        <div className="manga">This is a manga</div>
+        <div className="manga">
+            <h2>{props.name}</h2>
+            <img src={props.image} alt=""></img>
+        </div>
     );
 }
 
