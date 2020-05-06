@@ -1,5 +1,3 @@
-import React, {useState} from 'react';
-
 //RETURN COMMON ELEMENTS FROM AN ARRAY OF SORTED ARRAYS
 const getCommon = (arr, gallerySetter) => {
     try {

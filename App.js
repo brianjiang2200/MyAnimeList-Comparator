@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import {Link, withRouter} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 import logo from './assets/Anime_eye.svg';
 
@@ -26,12 +26,15 @@ const App = () => {
 
   //ADD USER 
   const addUser = async () => {
-    if (!(await getUser())) {
-      //Appropriate Anime or Manga List should update
-    }
-    else {
-      //INVALID USERNAME, REMOVE FROM LIST
-      users.pop();
+    //set maximum number of users arbitrarily to 5
+    if (users.length <= 5) {
+      if (!(await getUser())) {
+        //Appropriate Anime or Manga List should update
+      }
+      else {
+        //invalid username, remove from list
+        users.pop();
+      }
     }
   }
 
@@ -67,7 +70,7 @@ const App = () => {
 
   const getSearch = e => {
     e.preventDefault();
-    setUsers([...users, search]);
+    setUsers([...users, search.toLowerCase()]);
     setSearch("");
   };
 
@@ -77,19 +80,6 @@ const App = () => {
         <header>
           <div className="logo-container">
             <img id="logo" src={logo} alt="Logo"></img>
-            <h3 className="app-name">User Search</h3>
-            <Switch>
-              <Route path="/manga">
-                <Link to="/">
-                  <button>Compare Anime instead</button>
-                </Link>
-              </Route>
-              <Route path="/">
-                <Link to="/manga">
-                  <button>Compare Manga instead</button>
-                </Link>
-              </Route>
-            </Switch>
           </div>   
           <form onSubmit={getSearch} className="search-form">
             <input 
@@ -104,12 +94,22 @@ const App = () => {
                 Add User
             </button>
           </form>
+          <div className="change-src">
+            <Switch>
+              <Route path="/manga">
+                <Link to="/" title="Compare Anime Instead"></Link>
+              </Route>
+              <Route path="/">
+                <Link to="/manga" title="Compare Manga Instead"></Link>
+              </Route>
+            </Switch>
+          </div>
         </header>
         <main>
           <div className="user-list">
             {userdata.map(user => (
               <li key={user.username}>
-                <a href={user.url} target="_blank">{user.username}</a>
+                <a href={user.url}>{user.username}</a>
               </li>
             ))};
           </div>

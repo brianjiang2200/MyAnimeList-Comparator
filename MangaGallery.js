@@ -52,13 +52,11 @@ const MangaGallery = ({users, endpoint}) => {
 
     return (
         <div className="manga-gallery">
-            <div className="manga-list">
             <h1>Shared Manga</h1>
             <MangaList 
-            list={gallery}
-            index={index}
+                list={gallery}
+                index={index}
             />
-            </div>
             <div className="gallery-scroll">
                 <button className="next-btn" onClick={scrollForward}>Next 4 Manga</button>
                 <button className="prev-btn" onClick={scrollBack}>Previous 4 Manga</button>

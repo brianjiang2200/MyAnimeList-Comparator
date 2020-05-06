@@ -1,36 +1,29 @@
 import React from 'react';
 import Anime from './Anime';
 
-const AnimeList = (props) => {
-    if (props.list.length) {
-        let list = [];
-        if (props.list[props.index])
-            list.push(props.list[props.index]);
-        if (props.list[props.index + 1]) 
-            list.push(props.list[props.index + 1]);
-        if (props.list[props.index + 2]) 
-            list.push(props.list[props.index + 2]);
-        if (props.list[props.index + 3]) 
-            list.push(props.list[props.index + 3]);
-        
-        return (
-            <div className="anime-list">
-                {list.map(anime => (
-                    <Anime 
-                        key={anime.mal_id}
-                        name={anime.title}
-                        image={anime.image_url} 
-                    />
-                ))};
-            </div>
-        );
-    } else {
-        return (
-            <div className="anime-list">
+const AnimeList = ({list, index}) => {
 
-            </div>
-        );
-    }
+    let newList = [];
+    if (list[index]) 
+        newList.push(list[index]);
+    if (list[index + 1]) 
+        newList.push(list[index + 1]);
+    if (list[index + 2]) 
+        newList.push(list[index + 2]);
+    if (list[index + 3]) 
+        newList.push(list[index + 3]);
+        
+    return (
+        <div className="anime-list">
+            {newList.map(anime => (
+                <Anime
+                    key={anime.mal_id}
+                    name={anime.title}
+                    image={anime.image_url}
+                />
+            ))};
+        </div>
+    );
 };
 
 export default AnimeList;
