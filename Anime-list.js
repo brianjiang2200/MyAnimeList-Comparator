@@ -21,7 +21,7 @@ const AnimeList = ({list, index}) => {
                     name={anime.title}
                     image={anime.image_url}
                 />
-            ))};
+            ))}
         </div>
     );
 };

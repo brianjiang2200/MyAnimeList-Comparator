@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import {Link} from 'react-router-dom';
 
 import logo from './assets/Anime_eye.svg';
+import searchIcon from './assets/magnifying_glass.svg';
 
 import AnimeGallery from './AnimeGallery';
 import MangaGallery from './MangaGallery';
@@ -84,14 +85,14 @@ const App = () => {
           <form onSubmit={getSearch} className="search-form">
             <input 
               type="text"
-              placeholder="Username on MyAnimelist..." 
+              placeholder=" Username on MyAnimeList..." 
               className="search-bar" 
               value={search} 
               onChange={updateSearch}/>
             <button 
               className="search-button" 
               type="submit">
-                Add User
+                <img className="submit-icon" src={searchIcon}></img>
             </button>
           </form>
           <div className="change-src">
@@ -107,11 +108,12 @@ const App = () => {
         </header>
         <main>
           <div className="user-list">
+            <h1 className="user-list-title">Users</h1>
             {userdata.map(user => (
-              <li key={user.username}>
+              <li key={user.username} className="user-panels">
                 <a href={user.url}>{user.username}</a>
               </li>
-            ))};
+            ))}
           </div>
           <Switch>
               <Route path="/manga">

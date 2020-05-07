@@ -52,16 +52,14 @@ const AnimeGallery = ({users, endpoint}) => {
 
     return (
         <div className="anime-gallery">
-            <h1>Shared Anime</h1>
-            <AnimeList 
-                list={gallery}
-                index={index}
-            />
-            <div className="gallery-scroll">
-                <button className="next-btn" onClick={scrollForward}>Next 4 Anime</button>
-                <button className="prev-btn" onClick={scrollBack}>Previous 4 Anime</button>
-            </div>
-            <div className="featured">
+            <h1 className="gallery-title">Shared Anime</h1>
+            <div className="gallery-container">
+                <button className="next-btn" onClick={scrollBack}>&lt;</button>
+                <AnimeList 
+                    list={gallery}
+                    index={index}
+                />
+                <button className="prev-btn" onClick={scrollForward}>&gt;</button>
             </div>
         </div>
     );
