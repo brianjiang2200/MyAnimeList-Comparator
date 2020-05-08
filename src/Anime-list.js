@@ -20,6 +20,7 @@ const AnimeList = ({list, index}) => {
                     key={anime.mal_id}
                     name={anime.title}
                     image={anime.image_url}
+                    url={anime.url}
                 />
             ))}
         </div>

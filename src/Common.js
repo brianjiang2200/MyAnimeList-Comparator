@@ -1,6 +1,10 @@
 //RETURN COMMON ELEMENTS FROM AN ARRAY OF SORTED ARRAYS
 const getCommon = (arr, gallerySetter) => {
     try {
+      if (arr.length === 0) {
+        gallerySetter([]);
+        return;
+      }
       if (arr.length === 1) {
         gallerySetter(arr[0]);
         return;
