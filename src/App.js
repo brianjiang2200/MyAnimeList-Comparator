@@ -187,7 +187,12 @@ const App = () => {
             <div className="users-container">
               {userdata.map(user => (
                 <li key={user.username} className="user-panels soft-borders">
-                  <a href={user.url} title={`Go to ${user.username}'s profile`}>{user.username}</a>
+                  <div className="user-panel-upper">
+                    <a href={user.url} title={`Go to ${user.username}'s profile`}>{user.username}</a>
+                  </div>
+                  <div className="user-panel-lower">
+                    <img src={user.image_url} alt="" className="user-img"></img>
+                  </div>
                 </li>
               ))}
             </div>

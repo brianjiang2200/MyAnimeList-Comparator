@@ -111,19 +111,19 @@ header {
 .user-panels {
   margin: 0vh 1vh;
   padding: 2vh;
-  width: fit-content;
+  width: 15vw;
   height: 100%;
   list-style: none;
   background: rgba(26, 52, 97, 0.7);
   display: block;
 }
 .user-list li a:link, .user-list li a:visited {
-  font-size: 2rem;
+  font-size: 1.5vw;
   font-weight: 400;
   text-decoration: none;
 }
 .user-img {
-  height: 50%;
+  max-height: 8vh;
   margin: auto;
 }
 .clear-users-ctr {
